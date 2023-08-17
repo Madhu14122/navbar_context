@@ -1,25 +1,42 @@
-import logo from './logo.svg';
-import './App.css';
+import {Switch, Route} from 'react-router-dom'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import {Component} from 'react'
+
+import ThemeContext from './context/ThemeContext'
+import Home from './components/Home'
+
+import About from './components/About'
+
+import NotFound from './components/NotFound'
+
+import './App.css'
+
+class App extends Component {
+  state = {
+    isDarkTheme: false,
+  }
+
+  toggleTheme = () => {
+    this.setState(prevState => ({isDarkTheme: !prevState.isDarkTheme}))
+  }
+
+  render() {
+    const {isDarkTheme} = this.state
+    return (
+      <ThemeContext.Provider
+        value={{
+          isDarkTheme,
+          toggleTheme: this.toggleTheme,
+        }}
+      >
+        <Switch>
+          <Route exact path="/" component={Home} />
+          <Route exact path="/about" component={About} />
+          <Route component={NotFound} />
+        </Switch>
+      </ThemeContext.Provider>
+    )
+  }
 }
 
-export default App;
+export default App
